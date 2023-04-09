@@ -12,12 +12,12 @@ class MainActivity : AppCompatActivity(), Callback {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        Connection.client.connect()
         Connection.callbacks.add(this)
+        Connection.client.connect()
     }
 
     override fun onOpen() {
-        Connection.client.send("/chat")
+        Connection.client.send("/chats")
     }
 
     override fun onMessage(message: ModelMessage) {
@@ -31,8 +31,11 @@ class MainActivity : AppCompatActivity(), Callback {
     }
 
     override fun onChats(chats: List<ModelChat>) {
-        binding.chatRecycler.adapter = ChatRecyclerAdapter(chats)
-        binding.chatRecycler.layoutManager = LinearLayoutManager(this)
+        runOnUiThread {
+            binding.chatRecycler.adapter = ChatRecyclerAdapter(chats)
+            binding.chatRecycler.layoutManager = LinearLayoutManager(this)
+        }
+
     }
 
     override fun onPerson(person: User) {

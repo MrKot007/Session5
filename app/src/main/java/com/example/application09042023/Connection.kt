@@ -1,6 +1,7 @@
 package com.example.application09042023
 
 
+import android.util.Log
 import android.view.Display.Mode
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -10,9 +11,9 @@ import java.lang.Exception
 import java.net.URI
 
 object Connection {
-    const val url = "ws://95.31.130.149:8085/chat"
+    const val url = "ws://95.31.130.149:8085"
     val callbacks: MutableList<Callback> = mutableListOf()
-    val client = object: WebSocketClient(URI("$url/chat"), mapOf("userId" to "6")) {
+    val client = object: WebSocketClient(URI("$url/chat"), mapOf("idUser" to "6")) {
         override fun onOpen(handshakedata: ServerHandshake?) {
             callbacks.forEach {
                 it.onOpen()
@@ -20,14 +21,15 @@ object Connection {
         }
 
         override fun onMessage(message: String) {
-            if ("\"type\": \"person\"" in message) {
+            Log.d("message", message)
+            if ("\"type\":\"person\"" in message) {
                 val modelMessage = Gson().fromJson<ModelResponse<ModelMessage>>(message, object:
                     TypeToken<ModelResponse<ModelMessage>>(){}.type).body
                 callbacks.forEach {
                     it.onMessage(modelMessage)
                 }
             }
-            if ("\"type\": \"chats\"" in message) {
+            if ("\"type\":\"chats\"" in message) {
                 val modelChats = Gson().fromJson<ModelResponse<List<ModelChat>>>(message, object: TypeToken<ModelResponse<List<ModelChat>>>(){}.type).body
                 callbacks.forEach {
                     it.onChats(modelChats)
