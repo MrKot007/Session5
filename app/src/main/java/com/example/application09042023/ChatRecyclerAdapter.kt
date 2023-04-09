@@ -17,7 +17,12 @@ class ChatRecyclerAdapter(val list: List<ModelChat>) : RecyclerView.Adapter<Chat
     }
 
     override fun onBindViewHolder(holder: ChatViewHolder, position: Int) {
-        holder.binding
+        if (list[position].first.id != Info.userId){
+            holder.binding.textView.text = list[position].first.firstname
+        }else{
+            holder.binding.textView.text = list[position].second.firstname
+        }
+
     }
 
 }
