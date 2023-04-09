@@ -12,11 +12,12 @@ class MainActivity : AppCompatActivity(), Callback {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        Connection.client.connect()
+        Connection.callbacks.add(this)
     }
 
     override fun onOpen() {
-        Connection.client.connect()
-        Connection.callbacks.add(this)
+        Connection.client.send("/chat")
     }
 
     override fun onMessage(message: ModelMessage) {

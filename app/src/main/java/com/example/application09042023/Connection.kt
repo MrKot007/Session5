@@ -27,6 +27,12 @@ object Connection {
                     it.onMessage(modelMessage)
                 }
             }
+            if ("\"type\": \"chats\"" in message) {
+                val modelChats = Gson().fromJson<ModelResponse<List<ModelChat>>>(message, object: TypeToken<ModelResponse<List<ModelChat>>>(){}.type).body
+                callbacks.forEach {
+                    it.onChats(modelChats)
+                }
+            }
         }
 
         override fun onClose(code: Int, reason: String?, remote: Boolean) {}
