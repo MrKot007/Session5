@@ -21,7 +21,6 @@ object Connection {
         }
 
         override fun onMessage(message: String) {
-            Log.d("message", message)
             if ("\"type\":\"person\"" in message) {
                 val modelMessage = Gson().fromJson<ModelResponse<ModelMessage>>(message, object:
                     TypeToken<ModelResponse<ModelMessage>>(){}.type).body
@@ -33,6 +32,18 @@ object Connection {
                 val modelChats = Gson().fromJson<ModelResponse<List<ModelChat>>>(message, object: TypeToken<ModelResponse<List<ModelChat>>>(){}.type).body
                 callbacks.forEach {
                     it.onChats(modelChats)
+                }
+            }
+            if ("\"type\": \"chat\"" in message) {
+                val modelChat = Gson().fromJson<ModelResponse<ModelDataChat>>(message, object: TypeToken<ModelResponse<ModelDataChat>>(){}.type).body
+                callbacks.forEach {
+                    it.onChat(modelChat)
+                }
+            }
+            if ("\"type\": \"message\"" in message) {
+                val modelMessage = Gson().fromJson<ModelResponse<ModelMessage>>(message, object: TypeToken<ModelResponse<ModelMessage>>(){}.type).body
+                callbacks.forEach {
+                    it.onMessage(modelMessage)
                 }
             }
         }

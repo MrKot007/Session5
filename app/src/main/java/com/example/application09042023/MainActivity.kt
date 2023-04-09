@@ -1,5 +1,6 @@
 package com.example.application09042023
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -32,13 +33,21 @@ class MainActivity : AppCompatActivity(), Callback {
 
     override fun onChats(chats: List<ModelChat>) {
         runOnUiThread {
-            binding.chatRecycler.adapter = ChatRecyclerAdapter(chats)
+            binding.chatRecycler.adapter = ChatRecyclerAdapter(chats, object: OnClickChat{
+                override fun onClick(chat: ModelChat) {
+                    val chatIntent = Intent(this@MainActivity, ChatActivity::class.java)
+                    chatIntent.putExtra("username", if (chat.first.id != Info.userId) "${chat.first.firstname} ${chat.first.lastname}"
+                    else "${chat.second.firstname} ${chat.second.lastname}")
+                    chatIntent.putExtra("chatId", chat.id)
+                    startActivity(chatIntent)
+                }
+            })
             binding.chatRecycler.layoutManager = LinearLayoutManager(this)
         }
 
     }
 
     override fun onPerson(person: User) {
-        TODO("Not yet implemented")
+        binding.cardView.setCardBackgroundColor(person.getUserColor())
     }
 }
