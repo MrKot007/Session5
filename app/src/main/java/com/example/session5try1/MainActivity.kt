@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity(), Callback {
 
     override fun onPerson(person: User) {
         runOnUiThread {
-            Toast.makeText(this@MainActivity, person.firstname, Toast.LENGTH_LONG).show()
+            Toast.makeText(this@MainActivity, person.firstname, Toast.LENGTH_SHORT).show()
         }
     }
 }

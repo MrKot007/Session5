@@ -2,6 +2,7 @@ package com.example.session5try1
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.session5try1.databinding.ActivityChatBinding
@@ -24,9 +25,10 @@ class ChatActivity : AppCompatActivity(), Callback {
         }
         binding.send.setOnClickListener {
             if (binding.messageInput.text.toString() != "") {
-                val sendMessage: ModelSendMessage = ModelSendMessage(binding.messageInput.text.toString(), currentChat.chat.id, false)
+                val sendMessage: ModelSendMessage = ModelSendMessage(binding.messageInput.text.toString(), intent.getIntExtra("chatId", 0), false)
                 val sendMessageJson = Gson().toJson(sendMessage)
                 Connection.client.send(sendMessageJson)
+                binding.messageInput.text = null
             }else{
                 Toast.makeText(this@ChatActivity, "Сообщение не должно быть пустым!", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
@@ -41,6 +43,10 @@ class ChatActivity : AppCompatActivity(), Callback {
 
     override fun onMessage(message: ModelMessage) {
         runOnUiThread {
+            if (message.id == 0) {
+                Toast.makeText(this@ChatActivity, message.message, Toast.LENGTH_LONG).show()
+            }
+            Log.d("ERRR", message.toString())
             val newMessage = message.toRenderMessage(currentChat.chat.first)
             messages.add(newMessage)
             binding.mainChat.adapter!!.notifyItemInserted(messages.lastIndex)

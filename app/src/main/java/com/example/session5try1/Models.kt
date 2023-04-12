@@ -18,7 +18,7 @@ data class ModelMessage(
     }
 }
 data class ModelSendMessage(
-    val message: String,
+    val text: String,
     val idChat: Int,
     val isAudio: Boolean
 )
