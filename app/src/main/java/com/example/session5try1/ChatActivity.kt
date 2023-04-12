@@ -2,28 +2,59 @@ package com.example.session5try1
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.session5try1.databinding.ActivityChatBinding
 import com.example.session5try1.databinding.ChatBinding
+import com.google.gson.Gson
 
 class ChatActivity : AppCompatActivity(), Callback {
     private lateinit var binding: ActivityChatBinding
+    private lateinit var currentChat: ModelDataChat
+    private var messages: MutableList<RenderMessage> = mutableListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChatBinding.inflate(layoutInflater)
         setContentView(binding.root)
         Connection.callbacks.add(this)
+        binding.chatName.text = intent.getStringExtra("name")
+        Connection.client.send("/chat ${intent.getIntExtra("chatId", 0)}")
+        binding.back.setOnClickListener {
+            finish()
+        }
+        binding.send.setOnClickListener {
+            if (binding.messageInput.text.toString() != "") {
+                val sendMessage: ModelSendMessage = ModelSendMessage(binding.messageInput.text.toString(), currentChat.chat.id, false)
+                val sendMessageJson = Gson().toJson(sendMessage)
+                Connection.client.send(sendMessageJson)
+            }else{
+                Toast.makeText(this@ChatActivity, "Сообщение не должно быть пустым!", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+
+        }
+
+
     }
 
-    override fun onOpen() {
-        Connection.client.send("/chat ${intent.getIntExtra("chatId", 0)}")
-    }
+    override fun onOpen() {}
 
     override fun onMessage(message: ModelMessage) {
-        TODO("Not yet implemented")
+        runOnUiThread {
+            val newMessage = message.toRenderMessage(currentChat.chat.first)
+            messages.add(newMessage)
+            binding.mainChat.adapter!!.notifyItemInserted(messages.lastIndex)
+        }
+
     }
 
     override fun onChat(chat: ModelDataChat) {
-        TODO("Not yet implemented")
+        runOnUiThread {
+            currentChat = chat
+            messages = chat.messages.map {it.toRenderMessage(Info.idUser == it.idUser, chat.getUser(it.idUser))}
+                .toMutableList()
+            binding.mainChat.adapter = ChatAdapter(messages)
+            binding.mainChat.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true) }
     }
 
     override fun onChats(chats: List<ModelChat>) {}

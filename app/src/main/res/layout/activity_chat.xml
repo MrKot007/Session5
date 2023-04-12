@@ -43,7 +43,7 @@
                 android:id="@+id/imageView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
+                android:padding="15dp"
                 app:srcCompat="@drawable/baseline_arrow_back_ios_24" />
         </androidx.cardview.widget.CardView>
 
@@ -52,7 +52,7 @@
             android:layout_height="45dp"
             android:layout_marginStart="350dp"
             android:layout_marginTop="22dp"
-            android:layout_marginEnd="18dp"
+            android:layout_marginEnd="50dp"
             android:layout_marginBottom="8dp"
             app:cardCornerRadius="50dp"
             app:cardElevation="0dp">
@@ -66,7 +66,7 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView3"
+        android:id="@+id/voice"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginStart="18dp"
@@ -90,19 +90,21 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/voice"
+        android:id="@+id/form"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
         android:layout_marginBottom="12dp"
         app:cardBackgroundColor="#E6E6E6"
         app:cardCornerRadius="10dp"
         app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/cardView3">
+        app:layout_constraintEnd_toStartOf="@+id/send"
+        app:layout_constraintStart_toEndOf="@+id/voice">
 
         <EditText
-            android:id="@+id/editTextTextPersonName"
+            android:id="@+id/messageInput"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@null"
@@ -140,7 +142,7 @@
         android:id="@+id/mainChat"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/voice"
+        app:layout_constraintBottom_toTopOf="@+id/form"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardView2" />

@@ -12,13 +12,34 @@ data class ModelMessage(
     val isYou: Boolean,
     val datetime: String,
     val isAudio: Boolean
+) {
+    fun toRenderMessage(user: User): RenderMessage {
+        return RenderMessage(id, message, user, datetime, isYou, isAudio)
+    }
+}
+data class ModelSendMessage(
+    val message: String,
+    val idChat: Int,
+    val isAudio: Boolean
 )
 data class ModelArchivedMessage(
     val id: Int,
-    val message: String,
+    val text: String,
     val datetime: String,
     val idUser: Int,
     val idChat: Int,
+    val isAudio: Boolean
+) {
+    fun toRenderMessage(isYou: Boolean, user: User): RenderMessage {
+        return RenderMessage(id, text, user, datetime, isYou, isAudio)
+    }
+}
+data class RenderMessage(
+    val id: Int,
+    val message: String,
+    val user: User,
+    val datetime: String,
+    val isYou: Boolean,
     val isAudio: Boolean
 )
 data class User(
@@ -38,4 +59,12 @@ data class ModelChat(
 data class ModelDataChat(
     val chat: ModelChat,
     val messages: List<ModelArchivedMessage>
-)
+) {
+    fun getUser(idUser: Int) : User {
+        if (idUser == chat.first.id) {
+            return chat.first
+        }else{
+            return chat.second
+        }
+    }
+}

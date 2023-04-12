@@ -23,11 +23,7 @@ class MainActivity : AppCompatActivity(), Callback {
         Connection.client.send("/chats")
     }
 
-    override fun onMessage(message: ModelMessage) {
-        runOnUiThread {
-            Toast.makeText(this@MainActivity, message.message, Toast.LENGTH_LONG).show()
-        }
-    }
+    override fun onMessage(message: ModelMessage) {}
 
     override fun onChat(chat: ModelDataChat) {}
 
