@@ -48,8 +48,8 @@ class ChatActivity : AppCompatActivity(), Callback {
             }
             Log.d("ERRR", message.toString())
             val newMessage = message.toRenderMessage(currentChat.chat.first)
-            messages.add(newMessage)
-            binding.mainChat.adapter!!.notifyItemInserted(messages.lastIndex)
+            messages.add(0, newMessage)
+            binding.mainChat.adapter!!.notifyItemInserted(0)
         }
 
     }
@@ -59,7 +59,7 @@ class ChatActivity : AppCompatActivity(), Callback {
             currentChat = chat
             messages = chat.messages.map {it.toRenderMessage(Info.idUser == it.idUser, chat.getUser(it.idUser))}
                 .toMutableList()
-            binding.mainChat.adapter = ChatAdapter(messages)
+            binding.mainChat.adapter = ChatAdapter(messages.reversed())
             binding.mainChat.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true) }
     }
 
