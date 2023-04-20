@@ -48,8 +48,9 @@ class ChatActivity : AppCompatActivity(), Callback {
             }
             Log.d("ERRR", message.toString())
             val newMessage = message.toRenderMessage(currentChat.chat.first)
-            messages.add(0, newMessage)
-            binding.mainChat.adapter!!.notifyItemInserted(0)
+            messages.add(messages.lastIndex+1, newMessage)
+            binding.mainChat.adapter!!.notifyItemInserted(messages.lastIndex)
+            binding.mainChat.adapter = ChatAdapter(messages.reversed())
         }
 
     }
